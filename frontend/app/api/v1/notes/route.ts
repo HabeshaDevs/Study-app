@@ -96,10 +96,10 @@ export async function POST(request: NextRequest) {
 }
 
 /**
- * POST /api/v1/notes
- * Save or update notes
+ * GET /api/v1/notes
+ * Retrieve notes
  */
-export async function POST(request: NextRequest) {
+export async function GET(request: NextRequest) {
   try {
     const clientId = request.headers.get("x-forwarded-for") || "anonymous";
     const rateLimiter = getRateLimiter();

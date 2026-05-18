@@ -111,10 +111,10 @@ export async function POST(request: NextRequest) {
 }
 
 /**
- * POST /api/v1/sessions
- * Create a new study session
+ * GET /api/v1/sessions
+ * Retrieve study sessions
  */
-export async function POST(request: NextRequest) {
+export async function GET(request: NextRequest) {
   try {
     const clientId = request.headers.get("x-forwarded-for") || "anonymous";
 

@@ -45,10 +45,14 @@ export class PostgreSQLStorageAdapter implements IStorageAdapter {
           notes TEXT,
           created_at BIGINT NOT NULL,
           updated_at BIGINT NOT NULL,
-          created_at_idx TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-          INDEX idx_user_id (user_id),
-          INDEX idx_created_at (created_at)
+          created_at_idx TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
+      `);
+
+      // Create indexes for study_sessions separately
+      await client.query(`
+        CREATE INDEX IF NOT EXISTS idx_study_sessions_user_id ON study_sessions (user_id);
+        CREATE INDEX IF NOT EXISTS idx_study_sessions_created_at ON study_sessions (created_at);
       `);
 
       // Notes table
@@ -62,10 +66,14 @@ export class PostgreSQLStorageAdapter implements IStorageAdapter {
           tags TEXT[],
           created_at BIGINT NOT NULL,
           updated_at BIGINT NOT NULL,
-          created_at_idx TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-          INDEX idx_user_id (user_id),
-          INDEX idx_created_at (created_at)
+          created_at_idx TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
+      `);
+
+      // Create indexes for notes separately
+      await client.query(`
+        CREATE INDEX IF NOT EXISTS idx_notes_user_id ON notes (user_id);
+        CREATE INDEX IF NOT EXISTS idx_notes_created_at ON notes (created_at);
       `);
 
       // User preferences table
@@ -90,11 +98,15 @@ export class PostgreSQLStorageAdapter implements IStorageAdapter {
           event_type VARCHAR(255) NOT NULL,
           event_data JSONB,
           timestamp BIGINT NOT NULL,
-          created_at_idx TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-          INDEX idx_user_id (user_id),
-          INDEX idx_event_type (event_type),
-          INDEX idx_timestamp (timestamp)
+          created_at_idx TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
+      `);
+
+      // Create indexes for analytics_events separately
+      await client.query(`
+        CREATE INDEX IF NOT EXISTS idx_analytics_events_user_id ON analytics_events (user_id);
+        CREATE INDEX IF NOT EXISTS idx_analytics_events_event_type ON analytics_events (event_type);
+        CREATE INDEX IF NOT EXISTS idx_analytics_events_timestamp ON analytics_events (timestamp);
       `);
 
       console.log("Database schema initialized successfully");
